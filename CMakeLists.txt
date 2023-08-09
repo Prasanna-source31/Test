@@ -14,6 +14,6 @@ set(SOURCE_FILES Main.cpp Services.cpp Configurations.cpp Logging.cpp)
 # Add executable target with source files listed in SOURCE_FILES variable   
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/Curl/libcurl.a ws2_32.dll Wldap32.dll)
+target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/Curl/libcurl.a)
 set (INCLUDE_DIRS  ${CMAKE_CURRENT_LIST_DIR}/Curl/)
 target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIRS})
