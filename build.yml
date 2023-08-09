@@ -1,0 +1,89 @@
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+      - 'releases/**'
+  pull_request:
+    types: [opened, synchronize, reopened]
+  schedule:
+    - cron: '30 04 * * 1-5'  # Run every day at 10:00 AM (IST)
+
+name: Main Workflow
+
+jobs:
+  sonarqube:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: SonarQube Scan
+      id: sonarqube_scan
+      uses: sonarsource/sonarqube-scan-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+    - name: Send Teams Notification
+      if: ${{ always() }}  # Notify regardless of the outcome
+      env:
+        TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+      run: |
+        if [[ "${{ job.status }}" == "success" ]]; then
+          status_text="succeeded"
+          status_color="#36a64f"
+        else
+          status_text="failed"
+          status_color="#d9534f"
+        fi
+        
+        report_url="http://20.113.139.49:9000/dashboard?id=Test"
+
+        payload="{
+          \"@type\": \"MessageCard\",
+          \"themeColor\": \"${status_color}\",
+          \"title\": \"GitHub Actions Workflow\",
+          \"text\": \"Workflow has ${status_text}: ${{ github.repository }}\",
+          \"sections\": [
+            {
+              \"activityTitle\": \"SonarQube Analysis\",
+              \"activitySubtitle\": \"${status_text}\",
+              \"activityImage\": \"https://www.sonarqube.org/logos/index/favicon.png\",
+              \"facts\": [
+                {
+                  \"name\": \"Repository\",
+                  \"value\": \"${{ github.repository }}\"
+                },
+                {
+                  \"name\": \"Report\",
+                  \"value\": \"[SonarQube Analysis Report](${report_url})\"
+                }
+              ]
+            }
+          ]
+        }"
+
+        curl -X POST -H "Content-Type: application/json" -d "$payload" $TEAMS_WEBHOOK_URL
+    - name: Send Email Notification
+      if: ${{ always() }}  # Notify regardless of the outcome
+      uses: dawidd6/action-send-mail@v2
+      with:
+       # mail server settings
+       server_address: smtp-mail.outlook.com
+       server_port: 465
+       # user credentials
+       username: ${{ secrets.EMAIL_USERNAME }}
+       password: ${{ secrets.EMAIL_PASSWORD }}
+       # email subject
+       subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
+       # email body as text
+       body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
+       # comma-separated string, send email to
+       to: R.PrasannaMeenakshi@in.bosch.com
+       # from email name
+       from: R.PrasannaMeenakshi@in.bosch.com
