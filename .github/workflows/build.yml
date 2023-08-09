@@ -1,5 +1,4 @@
 on:
-  # Trigger analysis when pushing to your main branches, and when creating a pull request.
   push:
     branches:
       - main
@@ -7,21 +6,44 @@ on:
       - develop
       - 'releases/**'
   pull_request:
-      types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened]
   schedule:
-      - cron: '30 04 * * 1-5'  # Run every day at 10:00 AM (IST)
+    - cron: '30 04 * * 1-5'  # Run every day at 10:00 AM (IST)
 
 name: Main Workflow
+
 jobs:
   sonarqube:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
       with:
-        # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
+
     - name: SonarQube Scan
       uses: sonarsource/sonarqube-scan-action@master
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+    - name: Send Teams Notification on Success
+      if: ${{ success() }}  # Notify only if the previous step (SonarQube Scan) succeeds
+      env:
+        TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+      run: |
+        curl -H "Content-Type: application/json" -d '{
+          "text": "GitHub Actions Workflow succeeded: '${{ github.repository }}'",
+          "username": "GitHub Actions"
+        }' $TEAMS_WEBHOOK_URL
+
+    - name: Send Teams Notification on Failure
+      if: ${{ failure() }}  # Notify only if the previous step (SonarQube Scan) fails
+      env:
+        TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+      run: |
+        curl -H "Content-Type: application/json" -d '{
+          "text": "GitHub Actions Workflow failed: '${{ github.repository }}'",
+          "username": "GitHub Actions"
+        }' $TEAMS_WEBHOOK_URL
+
