@@ -89,4 +89,4 @@ jobs:
         echo "Workflow status: ${{ job.status }}" >> email.txt
         echo "" >> email.txt
         echo "Details:" >> email.txt
-        python send_email.py $GMAIL_USER $GMAIL_PASSWORD $RECIPIENT_EMAIL
+        python ${{ github.workspace }}/send_email.py $GMAIL_USER $GMAIL_PASSWORD $RECIPIENT_EMAIL
