@@ -72,21 +72,21 @@ jobs:
         }"
 
         curl -X POST -H "Content-Type: application/json" -d "$payload" $TEAMS_WEBHOOK_URL
+    - name: Set Up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
     - name: Send Email Notification
       if: ${{ always() }}  # Notify regardless of the outcome
-      uses: dawidd6/action-send-mail@v2
-      with:
-       # mail server settings
-       server_address: smtp.gmail.com
-       server_port: 465
-       # user credentials
-       username: ${{ secrets.EMAIL_USERNAME }}
-       password: ${{ secrets.EMAIL_PASSWORD }}
-       # email subject
-       subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
-       # email body as text
-       body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
-       # comma-separated string, send email to
-       to: R.PrasannaMeenakshi@in.bosch.com
-       # from email name
-       from: prasannameenakshi19999@gmail.com 
+      env:
+        GMAIL_USER: prasannameenakshi19999@gmail.com  # Your Gmail email
+        GMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}  # Your Gmail password
+        RECIPIENT_EMAIL: R.PrasannaMeenakshi@in.bosch.com  # Your Outlook email to receive notifications
+      run: |
+        echo "Subject: GitHub Actions Workflow Failed" > email.txt
+        echo "To: $RECIPIENT_EMAIL" >> email.txt
+        echo "" >> email.txt
+        echo "Workflow status: ${{ job.status }}" >> email.txt
+        echo "" >> email.txt
+        echo "Details:" >> email.txt
+        python send_email.py $GMAIL_USER $GMAIL_PASSWORD $RECIPIENT_EMAIL
