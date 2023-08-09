@@ -42,7 +42,7 @@ jobs:
           status_color="#d9534f"
         fi
         
-        report_url="http://20.113.139.49:9000/dashboard?id=Test{{ github.repository }}"
+        report_url="http://20.113.139.49:9000/dashboard?id=Test"
 
         payload="{
           \"@type\": \"MessageCard\",
