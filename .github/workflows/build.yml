@@ -71,15 +71,19 @@ jobs:
         curl -X POST -H "Content-Type: application/json" -d "$payload" $TEAMS_WEBHOOK_URL
     - name: Send Email Notification
       if: ${{ always() }}  # Notify regardless of the outcome
-      env:
-        SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
-        SMTP_PORT: ${{ secrets.SMTP_PORT }}
-        SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
-        SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-        RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
-      run: |
-        echo "Subject: GitHub Actions Workflow Status" > email.txt
-        echo "To: $RECIPIENT_EMAIL" >> email.txt
-        echo "" >> email.txt
-        echo "Workflow status: ${{ job.status }}" >> email.txt
-        cat email.txt | sendmail -v -S $SMTP_SERVER:$SMTP_PORT -au $SMTP_USERNAME -ap $SMTP_PASSWORD $RECIPIENT_EMAIL
+      uses: dawidd6/action-send-mail@v2
+      with:
+       # mail server settings
+       server_address: smtp-mail.outlook.com
+       server_port: 465
+       # user credentials
+       username: ${{ secrets.EMAIL_USERNAME }}
+       password: ${{ secrets.EMAIL_PASSWORD }}
+       # email subject
+       subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
+       # email body as text
+       body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
+       # comma-separated string, send email to
+       to: R.PrasannaMeenakshi@in.bosch.com
+       # from email name
+       from: R.PrasannaMeenakshi@in.bosch.com
