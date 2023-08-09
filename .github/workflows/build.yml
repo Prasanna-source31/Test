@@ -17,33 +17,55 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout Code
+      uses: actions/checkout@v2
       with:
         fetch-depth: 0
 
     - name: SonarQube Scan
+      id: sonarqube_scan
       uses: sonarsource/sonarqube-scan-action@master
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-    - name: Send Teams Notification on Success
-      if: ${{ success() }}  # Notify only if the previous step (SonarQube Scan) succeeds
+    - name: Send Teams Notification
+      if: ${{ always() }}  # Notify regardless of the outcome
       env:
         TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
       run: |
-        curl -H "Content-Type: application/json" -d '{
-          "text": "GitHub Actions Workflow succeeded: '${{ github.repository }}'",
-          "username": "GitHub Actions"
-        }' $TEAMS_WEBHOOK_URL
+        if [[ "${{ job.status }}" == "success" ]]; then
+          status_text="succeeded"
+          status_color="#36a64f"
+        else
+          status_text="failed"
+          status_color="#d9534f"
+        fi
+        
+        report_url="http://20.113.139.49:9000/dashboard?id=Test{{ github.repository }}"
 
-    - name: Send Teams Notification on Failure
-      if: ${{ failure() }}  # Notify only if the previous step (SonarQube Scan) fails
-      env:
-        TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
-      run: |
-        curl -H "Content-Type: application/json" -d '{
-          "text": "GitHub Actions Workflow failed: '${{ github.repository }}'",
-          "username": "GitHub Actions"
-        }' $TEAMS_WEBHOOK_URL
+        payload="{
+          \"@type\": \"MessageCard\",
+          \"themeColor\": \"${status_color}\",
+          \"title\": \"GitHub Actions Workflow\",
+          \"text\": \"Workflow has ${status_text}: ${{ github.repository }}\",
+          \"sections\": [
+            {
+              \"activityTitle\": \"SonarQube Analysis\",
+              \"activitySubtitle\": \"${status_text}\",
+              \"activityImage\": \"https://www.sonarqube.org/logos/index/favicon.png\",
+              \"facts\": [
+                {
+                  \"name\": \"Repository\",
+                  \"value\": \"${{ github.repository }}\"
+                },
+                {
+                  \"name\": \"Report\",
+                  \"value\": \"[SonarQube Analysis Report](${report_url})\"
+                }
+              ]
+            }
+          ]
+        }"
 
+        curl -X POST -H "Content-Type: application/json" -d "$payload" $TEAMS_WEBHOOK_URL
