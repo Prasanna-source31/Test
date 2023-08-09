@@ -77,7 +77,7 @@ jobs:
       uses: dawidd6/action-send-mail@v2
       with:
        # mail server settings
-       server_address: smtp-mail.outlook.com
+       server_address: smtp.gmail.com
        server_port: 465
        # user credentials
        username: ${{ secrets.EMAIL_USERNAME }}
@@ -87,6 +87,6 @@ jobs:
        # email body as text
        body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
        # comma-separated string, send email to
-       to: R.PrasannaMeenakshi@in.bosch.com
+       to: prasannameena1@gmail.com
        # from email name
        from: R.PrasannaMeenakshi@in.bosch.com
