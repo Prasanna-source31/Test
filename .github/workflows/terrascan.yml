@@ -15,15 +15,8 @@ jobs:
         iac_version: 'v14'
         policy_type: 'aws'
         only_warn: true
-        sarif_upload: true
-        #non_recursive:
-        #iac_dir:
-        #policy_path:
-        #skip_rules:
-        #config_path:
-        #webhook_url:
-        #webhook_token:
-    - name: Upload SARIF file
-      uses: github/codeql-action/upload-sarif@v2
-      with:
-        sarif_file: terrascan.sarif
+      # Add the following step to display the Terrascan output
+    - name: Display Terrascan Output
+      run: |
+        echo "Terrascan Output:"
+        echo "${{ steps.terrascan.outputs.stdout }}"
