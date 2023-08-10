@@ -13,10 +13,12 @@ jobs:
       with:
         iac_type: 'terraform'
         iac_version: 'v14'
-        policy_type: 'aws'
-        only_warn: true
-      # Add the following step to display the Terrascan output
+        policy_type: 'general'
+        only_warn: false   # Change this to 'false' to capture errors
     - name: Display Terrascan Output
       run: |
         echo "Terrascan Output:"
-        echo "${{ steps.terrascan.outputs.stdout }}"
+        echo "${{ steps.terrascan.outputs.stdout }}"   # Capture standard output
+        echo "Terrascan Errors:"
+        echo "${{ steps.terrascan.outputs.stderr }}"   # Capture standard error
+
