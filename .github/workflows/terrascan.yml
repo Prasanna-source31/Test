@@ -1,24 +1,45 @@
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  terrascan_job:
+  terrascan_job_aws:
     runs-on: ubuntu-latest
-    name: terrascan-action
+    name: terrascan-action AWS Policies
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Run Terrascan
-      id: terrascan
-      uses: tenable/terrascan-action@main
-      with:
-        iac_type: 'terraform'
-        iac_version: 'v14'
-        policy_type: 'general'
-        only_warn: false   # Change this to 'false' to capture errors
-    - name: Display Terrascan Output
-      run: |
-        echo "Terrascan Output:"
-        echo "${{ steps.terrascan.outputs.stdout }}"   # Capture standard output
-        echo "Terrascan Errors:"
-        echo "${{ steps.terrascan.outputs.stderr }}"   # Capture standard error
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Run Terrascan with AWS Policies
+        id: terrascan_aws
+        uses: tenable/terrascan-action@main
+        with:
+          iac_type: 'terraform'
+          iac_version: 'v14'
+          policy_type: 'aws'
+          only_warn: true
+      - name: Display Terrascan Output (AWS)
+        run: |
+          echo "Terrascan Output (AWS Policies):"
+          echo "${{ steps.terrascan_aws.outputs.stdout }}"
+
+  terrascan_job_general:
+    runs-on: ubuntu-latest
+    name: terrascan-action General Policies
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Run Terrascan with General Policies
+        id: terrascan_general
+        uses: tenable/terrascan-action@main
+        with:
+          iac_type: 'terraform'
+          iac_version: 'v14'
+          policy_type: 'general'
+          only_warn: true
+      - name: Display Terrascan Output (General)
+        run: |
+          echo "Terrascan Output (General Policies):"
+          echo "${{ steps.terrascan_general.outputs.stdout }}"
+
 
