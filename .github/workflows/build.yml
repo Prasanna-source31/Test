@@ -28,6 +28,11 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        extra-properties: |
+          sonar.pullrequest.provider=github
+          sonar.pullrequest.github.token.secured=${{ secrets.GITHUB_TOKEN }}
+          sonar.pullrequest.github.repository=${{ github.repository }}
+
 
     - name: Send Teams Notification
       if: ${{ always() }}  # Notify regardless of the outcome
