@@ -19,6 +19,10 @@ jobs:
           REPO="Prasanna-source31/Test"
           COLUMN_NAME="Incoming Issues"
           COLUMN_POSITION=0  # Adjust the position as needed
+          echo "TOKEN: $TOKEN"
+          echo "REPO: $REPO"
+          echo "COLUMN_NAME: $COLUMN_NAME"
+          echo "COLUMN_POSITION: $COLUMN_POSITION"
 
           # Create a new column in the project board
           curl -X POST "https://api.github.com/projects/columns" \
