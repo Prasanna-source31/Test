@@ -1,0 +1,27 @@
+name: Create Project Board Column
+on:
+  issues:
+    types:
+      - opened
+      - closed
+      
+
+jobs:
+  create_project_board_column:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Create Project Board Column
+        run: |
+          TOKEN="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"
+          REPO="Prasanna-source31/Test"
+          COLUMN_NAME="Incoming Issues"
+          COLUMN_POSITION=0  # Adjust the position as needed
+
+          # Create a new column in the project board
+          curl -X POST "https://api.github.com/projects/columns" \
+            -H "Authorization: token $TOKEN" \
+            -d "{\"name\":\"$COLUMN_NAME\",\"position\":$COLUMN_POSITION}" \
+            "https://api.github.com/repos/$REPO/projects/<PROJECT_ID>/columns"
