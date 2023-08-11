@@ -15,7 +15,7 @@ jobs:
 
       - name: Create Project Board Column
         run: |
-          TOKEN="${{secrets.BOARD}}"
+          TOKEN="${{secrets.BOARD_1}}"
           REPO="Prasanna-source31/Test"
           COLUMN_NAME="Incoming Issues"
           COLUMN_POSITION=3  # Adjust the position as needed
