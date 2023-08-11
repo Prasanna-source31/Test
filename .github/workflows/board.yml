@@ -15,7 +15,7 @@ jobs:
 
       - name: Create Project Board Column
         run: |
-          TOKEN="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"
+          TOKEN="${{secrets.BOARD}}"
           REPO="Prasanna-source31/Test"
           COLUMN_NAME="Incoming Issues"
           COLUMN_POSITION=0  # Adjust the position as needed
