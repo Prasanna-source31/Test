@@ -18,7 +18,7 @@ jobs:
           TOKEN="${{secrets.BOARD}}"
           REPO="Prasanna-source31/Test"
           COLUMN_NAME="Incoming Issues"
-          COLUMN_POSITION=0  # Adjust the position as needed
+          COLUMN_POSITION=3  # Adjust the position as needed
           echo "TOKEN: $TOKEN"
           echo "REPO: $REPO"
           echo "COLUMN_NAME: $COLUMN_NAME"
