@@ -18,10 +18,13 @@ jobs:
           iac_version: 'v14'
           policy_type: 'aws'
           only_warn: true
-      - name: Display Terrascan Output (AWS)
-        run: |
-          echo "Terrascan Output (AWS Policies):"
-          echo "${{ steps.terrascan_aws.outputs.stdout }}"
+      - name: Save Terrascan Output (AWS) to File
+        run: echo "${{ steps.terrascan_aws.outputs.stdout }}" > terrascan_aws_output.json
+      - name: Upload Terrascan Output (AWS) as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: terrascan_aws_output
+          path: terrascan_aws_output.json
 
   terrascan_job_general:
     runs-on: ubuntu-latest
@@ -37,9 +40,10 @@ jobs:
           iac_version: 'v14'
           policy_type: 'general'
           only_warn: true
-      - name: Display Terrascan Output (General)
-        run: |
-          echo "Terrascan Output (General Policies):"
-          echo "${{ steps.terrascan_general.outputs.stdout }}"
-
-
+      - name: Save Terrascan Output (General) to File
+        run: echo "${{ steps.terrascan_general.outputs.stdout }}" > terrascan_general_output.json
+      - name: Upload Terrascan Output (General) as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: terrascan_general_output
+          path: terrascan_general_output.json
