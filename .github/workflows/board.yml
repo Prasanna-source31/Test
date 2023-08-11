@@ -24,4 +24,4 @@ jobs:
           curl -X POST "https://api.github.com/projects/columns" \
             -H "Authorization: token $TOKEN" \
             -d "{\"name\":\"$COLUMN_NAME\",\"position\":$COLUMN_POSITION}" \
-            "https://api.github.com/repos/$REPO/projects/<PROJECT_ID>/columns"
+            "https://api.github.com/repos/$REPO/projects/3/columns"
