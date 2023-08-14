@@ -2,7 +2,7 @@ name: Add Main Workflow
 
 on:
   schedule:
-    - cron: '15 06 * * *'  # Run every day at 11:25 AM
+    - cron: '25 06 * * *'  # Run every day at 11:25 AM
 
 jobs:
   add_main_workflow:
