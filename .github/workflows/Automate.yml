@@ -1,8 +1,12 @@
 name: Add Main Workflow
 
 on:
+  issues:
+    types:
+      - opened
+      - closed
   schedule:
-    - cron: '25 06 * * *'  # Run every day at 11:25 AM
+    - cron: '25 06 * * *'  # Run every day at 11:55 AM
 
 jobs:
   add_main_workflow:
