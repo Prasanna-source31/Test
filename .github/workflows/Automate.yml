@@ -1,15 +1,16 @@
-name: Add Main Workflow
+name: Add Workflow File
 
 on:
   issues:
-    types:
-      - opened
-      - closed
+    type:
+     -closed
+     -open
+  
   schedule:
-    - cron: '25 06 * * *'  # Run every day at 11:55 AM
+    - cron: '0 0 * * *'  # Run every day at midnight UTC
 
 jobs:
-  add_main_workflow:
+  add_workflow:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,17 +21,26 @@ jobs:
         run: |
           git config --global user.email "R.PrasannaMeenakshi@in.bosch.com"
           git config --global user.name "Prasanna"
-      - name: Add Main Workflow
+
+      - name: Add Workflow File
         run: |
           ORGANIZATION="Prasanna-source31"
           WORKFLOW_PATH=".github/workflows/terrascan.yml"  # Change this path if needed
           WORKFLOW_CONTENT=$(cat $WORKFLOW_PATH | base64 -w 0)
+          
           for repo in $(gh repo list $ORGANIZATION --json=name --jq '.[].name'); do
+            # Fetch the existing file content and SHA-1 hash
+            existing_content=$(gh api -X GET /repos/$ORGANIZATION/$repo/contents/$WORKFLOW_PATH)
+            existing_sha=$(echo "$existing_content" | jq -r '.sha')
+
+            # Create or update the file
             gh api -X PUT /repos/$ORGANIZATION/$repo/contents/$WORKFLOW_PATH \
               -F message="Add main workflow" \
               -F content="$WORKFLOW_CONTENT" \
-              -F branch=main
-            echo "Main workflow file added to $repo"
+              -F branch=main \
+              -F sha="$existing_sha"  # Include the existing SHA-1 hash
+            echo "Workflow file added to $repo"
           done
+
     env:
         GITHUB_TOKEN: ${{ secrets.AUTOMATION_TOKEN }}
