@@ -27,6 +27,9 @@ jobs:
       uses: sonarsource/sonarqube-scan-action@master
       with:
        projectBaseDir: .
+       extraProperties: |
+        sonar.sources=.
+        sonar.sources.include=.github/workflows/**/*   # Include .github/workflows
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
