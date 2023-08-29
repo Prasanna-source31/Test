@@ -32,7 +32,7 @@ jobs:
        projectBaseDir: ${{ github.workspace }}
        extra-arguments: |
          -Dsonar.sources=${{ github.workspace }}/Test/Test
-         -Dsonar.sources.include=${{ github.workspace }}/.github/workflows
+         -Dsonar.inclusions=**  # Include all files and folders
 
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
