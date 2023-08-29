@@ -28,10 +28,6 @@ jobs:
     - name: SonarQube Scan
       id: sonarqube_scan
       uses: sonarsource/sonarqube-scan-action@master
-      with:
-        projectBaseDir: .
-        extra-arguments: |
-           -sonar.sources=/home/runner/work/Test/Test
 
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
