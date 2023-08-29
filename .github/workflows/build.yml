@@ -32,7 +32,6 @@ jobs:
         projectBaseDir: .
         extra-arguments: |
            -sonar.sources=/home/runner/work/Test/Test
-           -sonar.sources.include=.github/workflows
 
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
