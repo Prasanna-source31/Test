@@ -28,6 +28,11 @@ jobs:
     - name: SonarQube Scan
       id: sonarqube_scan
       uses: sonarsource/sonarqube-scan-action@master
+      with:
+       projectBaseDir: ${{ github.workspace }}
+       extra-arguments: |
+         -Dsonar.sources=${{ github.workspace }}/Test/Test
+         -Dsonar.sources.include=${{ github.workspace }}/.github/workflows
 
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
