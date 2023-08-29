@@ -31,8 +31,8 @@ jobs:
       with:
         projectBaseDir: .
         extra-arguments: |
-           -Dsonar.sources=/home/runner/work/Test/Test
-           -Dsonar.sources.include=.github/workflows
+           -sonar.sources=/home/runner/work/Test/Test
+           -sonar.sources.include=.github/workflows
 
 In the modified configuration:
 
