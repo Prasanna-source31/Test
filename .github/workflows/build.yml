@@ -29,10 +29,18 @@ jobs:
       id: sonarqube_scan
       uses: sonarsource/sonarqube-scan-action@master
       with:
-          projectBaseDir: .
-          extraProperties: |
-            sonar.sources=/home/runner/work/Test/Test
-            sonar.sources.include=.github/workflows
+        projectBaseDir: .
+        extra-arguments: |
+           -Dsonar.sources=/home/runner/work/Test/Test
+           -Dsonar.sources.include=.github/workflows
+
+In the modified configuration:
+
+    The extra-arguments field is used to pass additional analysis parameters to the SonarQube scanner.
+    The parameters are specified as a list of strings, where each parameter is preceded by -D to indicate it's a SonarQube analysis property.
+
+Make sure to replace the configuration in your workflow file with the modified version above, and it should resolve the error you were encountering.
+
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
