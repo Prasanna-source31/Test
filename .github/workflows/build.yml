@@ -29,7 +29,7 @@ jobs:
          echo "The relative path to the .github folder is: $relative_path"
     - name: Extract project key from sonar.properties
       id: get_project_key
-      run: echo "::set-output name=project_key::$(cat sonar-project.properties | grep sonar.projectKey | cut -d'=' -f2)"
+      run: echo "$(cat sonar-project.properties | grep sonar.projectKey | cut -d'=' -f2)" > project_key.txt
 
         
            
@@ -65,6 +65,7 @@ jobs:
 
         project_key="${{ steps.get_project_key.outputs.project_key }}"
         report_url="http://20.113.139.49:9000/dashboard?id=$project_key"
+        echo "Report URL: $report_url"
 
         payload="{
           \"@type\": \"MessageCard\",
