@@ -29,7 +29,7 @@ jobs:
          echo "The relative path to the .github folder is: $relative_path"
     - name: Extract project key from sonar.properties
       id: get_project_key
-      run: echo "$(cat sonar-project.properties | jq -r '.sonar.projectKey') > project_key.txt"
+      run: echo $(cat sonar-project.properties | jq -r '.sonar.projectKey') > project_key.txt
 
         
            
