@@ -23,7 +23,11 @@ jobs:
         fetch-depth: 0
     - name: Get path
       run: |
-          echo "The path to the main repo is:$(git rev-parse --show-prefix)"
+         repo_root=$(git rev-parse --show-toplevel)
+         target_dir=".github/workflows"
+         relative_path=$(realpath --relative-to="$repo_root" "$target_dir")
+         echo "The relative path to the .github folder is: $relative_path"
+
         
            
 
