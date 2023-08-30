@@ -23,7 +23,11 @@ jobs:
         fetch-depth: 0
     - name: Get path
       run: |
-          echo "The path to the main repo is:$(git rev-parse --show-toplevel)/.git"
+          #echo "The path to the main repo is:$(git rev-parse --show-toplevel)/.git"
+        
+          repo_root=$(git rev-parse --show-toplevel)
+          target_dir="{{$GITHUB_WORKSPACE}}"
+          echo "The relative path is : $(realpath --relative-to="$repo_root" "$target_dir")"  
 
     - name: SonarQube Scan
       id: sonarqube_scan
