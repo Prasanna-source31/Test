@@ -21,15 +21,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - name: Get path
-      run: |
-         repo_root=$(git rev-parse --show-toplevel)
-         target_dir=".github/workflows"
-         relative_path=$(realpath --relative-to="$repo_root" "$target_dir")
-         echo "The relative path to the .github folder is: $relative_path"
-    - name: Extract project key from sonar.properties
-      id: get_project_key
-      run: echo $(cat sonar-project.properties | jq -r '.sonar.projectKey') > project_key.txt
+    
 
         
            
@@ -42,10 +34,7 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        extra-properties: |
-          sonar.pullrequest.provider=github
-          sonar.pullrequest.github.token.secured=${{ secrets.GITHUB_TOKEN }}
-          sonar.pullrequest.github.repository=${{ github.repository }}
+        
 
 
     - name: Send Teams Notification
