@@ -55,7 +55,7 @@ jobs:
         project_key="${{ steps.get_project_key.outputs.project_key }}"
         report_url="http://20.113.139.49:9000/dashboard?id=$project_key"
         echo "Report URL: $report_url"
-
+        workflow_file_name="${GITHUB_WORKFLOW}"
         payload="{
           \"@type\": \"MessageCard\",
           \"themeColor\": \"${status_color}\",
