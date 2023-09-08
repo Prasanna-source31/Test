@@ -74,7 +74,11 @@ jobs:
                 {
                   \"name\": \"Report\",
                   \"value\": \"[SonarQube Analysis Report](${report_url})\"
-                }
+                },
+                 {
+          \"name\": \"Workflow File\",
+          \"value\": \"${workflow_file_name}\"
+        }
               ]
             }
           ]
