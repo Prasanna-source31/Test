@@ -44,15 +44,6 @@ jobs:
           }' "https://api.github.com/repos/$REPO/branches/$BRANCH/protection"
         done
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH_TOKEN: ${{ secrets.BRANCH_TOKEN }}
     
-    - name: Debug Statement
-      run: |
-        echo "Workflow is running."
-        echo "ORGANIZATION: $ORGANIZATION"
-        echo "GITHUB_TOKEN: $GITHUB_TOKEN"
-        echo "REPOS: $REPOS"
-      env:
-        ORGANIZATION: $ORGANIZATION
-        GITHUB_TOKEN: $GITHUB_TOKEN
-        REPOS: $REPOS
+  
