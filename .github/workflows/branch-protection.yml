@@ -23,7 +23,8 @@ jobs:
         # The above token should have necessary permissions for modifying repositories.
 
         # Retrieve a list of repositories in your organization
-        REPOS=$(curl -H "Authorization: token $GITHUB_TOKEN" -s "https://api.github.com/orgs/$ORGANIZATION/repos" | jq -r '.[] | .full_name')
+        REPOS=$(curl -H "Authorization: token $GITHUB_TOKEN" -s "https://api.github.com/orgs/$ORGANIZATION/repos" | jq -r '.[].full_name')
+
 
         for REPO in $REPOS; do
           # Apply branch protection rules to each repository
