@@ -2,9 +2,9 @@ name: Apply Branch Protection Rules
 
 on:
   issues:
-     types:
-        -opened
-        -closed
+    types:
+      - opened
+      - closed
 
 jobs:
   apply-branch-protection:
