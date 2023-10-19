@@ -1,0 +1,46 @@
+name: Apply Branch Protection Rules
+
+on:
+  
+    branches:
+      issues:
+       types:
+        -opened
+        -closed
+
+jobs:
+  apply-branch-protection:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Apply Branch Protection Rules
+      run: |
+        # Define your organization and branch protection rule configuration
+        ORGANIZATION="Prasanna-source31"
+        BRANCH="main"
+        GITHUB_TOKEN="$BRANCH_TOKEN"
+        # The above token should have necessary permissions for modifying repositories.
+
+        # Retrieve a list of repositories in your organization
+        REPOS=$(curl -H "Authorization: token $GITHUB_TOKEN" -s "https://api.github.com/orgs/$ORGANIZATION/repos" | jq -r '.[] | .full_name')
+
+        for REPO in $REPOS; do
+          # Apply branch protection rules to each repository
+          echo "Applying branch protection rules to $REPO..."
+          curl -X PUT -H "Authorization: token $GITHUB_TOKEN" -d '{
+            "required_status_checks": null,
+            "enforce_admins": null,
+            "required_pull_request_reviews": {
+              "dismissal_restrictions": {},
+              "dismiss_stale_reviews": false,
+              "require_code_owner_reviews": true,
+              "required_approving_review_count": 1
+            },
+            "restrictions": null
+          }' "https://api.github.com/repos/$REPO/branches/$BRANCH/protection"
+        done
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
