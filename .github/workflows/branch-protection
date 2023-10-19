@@ -1,10 +1,8 @@
 name: Apply Branch Protection Rules
 
 on:
-  
-    branches:
-      issues:
-       types:
+  issues:
+     types:
         -opened
         -closed
 
