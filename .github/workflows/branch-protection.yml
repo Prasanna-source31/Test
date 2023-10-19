@@ -13,19 +13,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Git
-      run: |
-        git config --global user.email "your-email@example.com"
-        git config --global user.name "Your Name"
-      env:
-        GITHUB_TOKEN: ${{ secrets.BRANCH_TOKEN }}
+    
 
     - name: Apply Branch Protection Rules
       run: |
         # Define your organization and branch protection rule configuration
-        ORGANIZATION="your-org"
+        ORGANIZATION="Prasanna-source31"
         BRANCH="main"
-        GITHUB_TOKEN="$YOUR_GITHUB_TOKEN"
+        GITHUB_TOKEN="$BRANCH_TOKEN"
         # The above token should have necessary permissions for modifying repositories.
 
         # Retrieve a list of repositories in your organization
