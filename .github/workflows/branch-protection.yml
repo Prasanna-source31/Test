@@ -13,8 +13,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    
-
     - name: Apply Branch Protection Rules
       run: |
         # Define your organization and branch protection rule configuration
@@ -44,3 +42,14 @@ jobs:
         done
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Debug Statement
+      run: |
+        echo "Workflow is running."
+        echo "ORGANIZATION: $ORGANIZATION"
+        echo "GITHUB_TOKEN: $GITHUB_TOKEN"
+        echo "REPOS: $REPOS"
+      env:
+        ORGANIZATION: $ORGANIZATION
+        GITHUB_TOKEN: $GITHUB_TOKEN
+        REPOS: $REPOS
