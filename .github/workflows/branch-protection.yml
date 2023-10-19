@@ -18,17 +18,17 @@ jobs:
         # Define your organization and branch protection rule configuration
         ORGANIZATION="Prasanna-source31"
         BRANCH="main"
-        GITHUB_TOKEN="$BRANCH_TOKEN"
+        BRANCH_TOKEN=${{ secrets.BRANCH_TOKEN }}
         # The above token should have necessary permissions for modifying repositories.
 
         # Retrieve a list of repositories in your organization
-        REPOS_RESPONSE=$(curl -H "Authorization: token $GITHUB_TOKEN" -s "https://api.github.com/orgs/$ORGANIZATION/repos")
+        REPOS_RESPONSE=$(curl -H "Authorization: token $BRANCH_TOKEN" -s "https://api.github.com/users/$ORGANIZATION/repos")
         REPOS=$(echo "$REPOS_RESPONSE" | grep -o "\"full_name\": \"[^\"]*\"" | cut -d '"' -f 4)
 
         for REPO in $REPOS; do
           # Apply branch protection rules to each repository
           echo "Applying branch protection rules to $REPO..."
-          curl -X PUT -H "Authorization: token $GITHUB_TOKEN" -d '{
+          curl -X PUT -H "Authorization: token $BRANCH_TOKEN" -d '{
             "required_status_checks": null,
             "enforce_admins": null,
             "required_pull_request_reviews": {
