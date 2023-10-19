@@ -1,10 +1,9 @@
-name: Apply Branch Protection Rules
+name: Apply Branch Protection Rules on Issue Open
 
 on:
   issues:
     types:
       - opened
-      - closed
 
 jobs:
   apply-branch-protection:
@@ -13,23 +12,25 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-    - name: Install jq
+
+    - name: Set up Git
       run: |
-        sudo apt-get update
-        sudo apt-get install jq -y
-      shell: bash
+        git config --global user.email "your-email@example.com"
+        git config --global user.name "Your Name"
+      env:
+        GITHUB_TOKEN: ${{ secrets.BRANCH_TOKEN }}
 
     - name: Apply Branch Protection Rules
       run: |
         # Define your organization and branch protection rule configuration
-        ORGANIZATION="Prasanna-source31"
+        ORGANIZATION="your-org"
         BRANCH="main"
-        GITHUB_TOKEN="$BRANCH_TOKEN"
+        GITHUB_TOKEN="$YOUR_GITHUB_TOKEN"
         # The above token should have necessary permissions for modifying repositories.
 
         # Retrieve a list of repositories in your organization
-        REPOS=$(curl -H "Authorization: token $GITHUB_TOKEN" -s "https://api.github.com/orgs/$ORGANIZATION/repos" | jq -r '.[].full_name')
-
+        REPOS_RESPONSE=$(curl -H "Authorization: token $GITHUB_TOKEN" -s "https://api.github.com/orgs/$ORGANIZATION/repos")
+        REPOS=$(echo "$REPOS_RESPONSE" | grep -o "\"full_name\": \"[^\"]*\"" | cut -d '"' -f 4)
 
         for REPO in $REPOS; do
           # Apply branch protection rules to each repository
