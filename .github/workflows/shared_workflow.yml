@@ -1,0 +1,12 @@
+name: Shared Workflow
+
+on:
+  repository_dispatch:
+    types: [trigger-shared-workflow]
+
+jobs:
+  my_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Shared Workflow
+        run: echo "Running shared workflow..."
