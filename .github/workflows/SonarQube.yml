@@ -7,6 +7,12 @@ on:
    secrets:
       token:
         required: true
+      SONAR_TOKEN:
+        required: true
+      SONAR_HOST_URL:
+        required: true
+      TEAMS_WEBHOOK_URL:
+         required: true
   
      
   pull_request:
